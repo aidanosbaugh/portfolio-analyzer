@@ -22,7 +22,7 @@ def update_price():
         print(f"{stock['Ticker']:6} ✓ {price:.2f}")
     save_portfolio()
     print("Portfolio succesfully updated")
-    print(f"Last Updated at {dt.datetime.today()}")
+    print(f"at {dt.datetime.today()}")
    
 
 
@@ -141,8 +141,8 @@ def single_stock_analyze():
         
         print("-" * 35)    
         print(f"Stock: {ticker}", end="\n")
-        print(f"Current value: {value:.2f}")
-        print(f"Profit: {profit:.2f}")  
+        print(f"Current value: ${value:.2f}")
+        print(f"Profit: ${profit:.2f}")  
         print(f"Percent Gain: {gain:.2f}% ") 
         print("-" * 35)
 
@@ -150,20 +150,22 @@ def portfolio_analyze():
     origtotalval = original_total()
     totalval = total_value()
     totalprof = total_profit()
+    portreturn = (total_profit()/original_total()) * 100
     print(f"=" * 8, "Portfolio Summary", "=" * 8)
     print("")
     print(f"Stocks owned: ", len(stocks))
-    print(f"Original Portfolio Value: {origtotalval:.2f}")
-    print(f"Current Portfolio Value: {totalval:.2f}")
-    print(f"Current Portfolio Profit: {totalprof:.2f}\n")
+    print(f"Original Portfolio Value: ${origtotalval:.2f}")
+    print(f"Current Portfolio Value: ${totalval:.2f}")
+    print(f"Current Portfolio Profit: ${totalprof:.2f}")
+    print(f"Current Portfolio Return: {portreturn:.2f}%\n")
     print("=" * 35)
     for stock in stocks:
         print("=" * 35,)    
         print(f"Stock: {stock['Ticker']}")
         print("")
-        print(f"Current value: {value_stock(stock):.2f}")
-        print(f"Profit: {profit_stock(stock):.2f}")  
-        print(f"Percent Gain: {percent_gain(stock):.2f}% ") 
+        print(f"Current value: ${value_stock(stock):.2f}")
+        print(f"Profit: ${profit_stock(stock):.2f}")  
+        print(f"Percent Gain: ${percent_gain(stock):.2f}% ") 
         print("=" * 35)
         
 def find_stock(ticker):
@@ -197,7 +199,16 @@ def total_profit():
     for stock in stocks:
         total_profit += profit_stock(stock)
     return total_profit
-           
+
+def portfolio_allocate():
+    for stock in stocks:
+        print("=" * 35)
+        print(f"{stock['Ticker']}\n")
+        print(f"Value: ${value_stock(stock):.2f}\n")
+        print(f"Allocation: {(value_stock(stock)/total_value()) * 100:.2f}%")
+        print("=" * 35)
+
+
 def profit_stock(stock):
     profit = value_stock(stock) - original_value(stock)
     return profit
@@ -232,11 +243,12 @@ def menu():
         try:
             choice = int(input( "Single Stock (1)\n"
                             "Whole Portfolio (2)\n"
-                            "Update Live Price (3)\n"
-                            "Add Stock (4)\n"
-                            "Edit Stock (5)\n"
-                            "Remove Stock (6)\n"
-                            "Exit (7)\n"
+                            "Portfolio Allocations (3)\n"
+                            "Update Live Prices (4)\n"
+                            "Add Stock (5)\n"
+                            "Edit Stock (6)\n"
+                            "Remove Stock (7)\n"
+                            "Exit (8)\n"
                             "Choice:"
                             ))
         except ValueError:
@@ -248,14 +260,16 @@ def menu():
             portfolio_analyze()
             sort_stocks(stocks)
         elif choice == 3:
-            update_price()
+            portfolio_allocate()
         elif choice == 4:
-            add_stock()
+            update_price()
         elif choice == 5:
-            edit_stock()
+            add_stock()
         elif choice == 6:
-            remove_stock()
+            edit_stock()
         elif choice == 7:
+            remove_stock()
+        elif choice == 8:
             print("Goodbye!")
             break
         else: 
