@@ -1,4 +1,4 @@
-
+import utils
 
 def single_stock_analyze(stocks):
     ticker = input("What stock would you like to view?").upper()
@@ -11,34 +11,32 @@ def single_stock_analyze(stocks):
         profit = (profit_stock(stock))
         gain = (percent_gain(stock))
         
-        print("-" * 35)    
+        print(utils.divider())    
         print(f"Stock: {ticker}", end="\n")
         print(f"Current value: ${value:.2f}")
-        print(f"Profit: ${profit:.2f}")  
-        print(f"Percent Gain: {gain:.2f}% ") 
-        print("-" * 35)
+        print(f"Profit: {utils.color_money(profit)}")
+        print(f"Percent Gain: {utils.color_percent(gain)}")
+        print(utils.divider())
 
 def portfolio_analyze(stocks):
     origtotalval = original_total(stocks)
     totalval = total_value(stocks)
     totalprof = total_profit(stocks)
     portreturn = (total_profit(stocks)/original_total(stocks)) * 100
-    print(f"=" * 8, "Portfolio Summary", "=" * 8)
-    print("")
+    print(f"=" * 8, "Portfolio Summary", "=" * 8, "\n")
     print(f"Stocks owned: ", len(stocks))
     print(f"Original Portfolio Value: ${origtotalval:.2f}")
     print(f"Current Portfolio Value: ${totalval:.2f}")
-    print(f"Current Portfolio Profit: ${totalprof:.2f}")
-    print(f"Current Portfolio Return: {portreturn:.2f}%\n")
-    print("=" * 35)
+    print(f"Current Portfolio Profit: {utils.color_money(totalprof)}")
+    print(f"Current Portfolio Return: {utils.color_percent(portreturn)}\n")
+    print(utils.divider())
     for stock in stocks:
-        print("=" * 35,)    
-        print(f"Stock: {stock['Ticker']}")
-        print("")
+        print(utils.divider())    
+        print(f"Stock: {stock['Ticker']}", "\n")
         print(f"Current value: ${value_stock(stock):.2f}")
-        print(f"Profit: ${profit_stock(stock):.2f}")  
-        print(f"Percent Gain: ${percent_gain(stock):.2f}% ") 
-        print("=" * 35)
+        print(f"Profit: {utils.color_money(profit_stock(stock))}")  
+        print(f"Percent Gain: {utils.color_percent(percent_gain(stock))} ") 
+        print(utils.divider())
         
 def find_stock(ticker, stocks):
     for stock in stocks:
@@ -86,7 +84,7 @@ def profit_stock(stock):
     return profit
 
 def percent_gain(stock):
-    percent_gain =  profit_stock(stock) / (stock["Original Price"] * stock["Shares"]) * 100 
+    percent_gain = profit_stock(stock) / (stock["Original Price"] * stock["Shares"]) * 100 
     return percent_gain  
 
 def sort_stocks(stocks):
@@ -102,8 +100,8 @@ def sort_stocks(stocks):
     for stock in sorted_stocks:
         print(
             f"{stock['Ticker']:6}  | "
-            f"Gain:  {percent_gain(stock):7.2f}%  | "
-            f"Profit: ${profit_stock(stock):8.2f}  | "
+            f"Gain: {utils.color_percent(percent_gain(stock)):8}  | "
+            f"Profit: {utils.color_money(profit_stock(stock)):8}  | "
             f"Value: ${value_stock(stock):8.2f}  | "
         )
-    print("=" * 35)
+    print(utils.divider())
